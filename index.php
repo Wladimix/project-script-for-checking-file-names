@@ -86,8 +86,27 @@ function getDatesToCheck($beginYear, $beginMonth, $substring)
             $beginMonthFlag = !$beginMonthFlag ? checkIfThereIsMonthInLine($months[$j], $beginMonth) : true;
             $nextEndMonthFlag = $endMonthFlag ? true : false;
             $endMonthFlag = !$endMonthFlag ? checkIfThereIsMonthInLine($months[$j], date('m')) : true;
-            if ($firstYearFlag && $beginMonthFlag || !$firstYearFlag && $i != date('Y') || $i == date('Y') && !$nextEndMonthFlag) {
+            if ($firstYearFlag && $i == date('Y')) {
+                if ($beginMonthFlag && !$nextEndMonthFlag) {
+                    $datesToCheck[] = $i . '.' . $months[$j];
+                    continue;
+                }
+            }
+            if ($firstYearFlag && $i != date('Y')) {
+                if ($beginMonthFlag) {
+                    $datesToCheck[] = $i . '.' . $months[$j];
+                    continue;
+                }
+            }
+            if (!$firstYearFlag && $i != date('Y')) {
                 $datesToCheck[] = $i . '.' . $months[$j];
+                continue;
+            }
+            if (!$firstYearFlag && $i == date('Y')) {
+                if (!$nextEndMonthFlag) {
+                    $datesToCheck[] = $i . '.' . $months[$j];
+                    continue;
+                }
             }
         }
     }
